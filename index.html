@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chetan Cricket Prediction</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #000;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            height: 100vh;
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.5), rgba(0,0,0,0.8)),
+                        url('https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow: hidden;
+        }
+
+        .header {
+            text-align: center;
+            padding: 25px 20px 20px;
+            background: linear-gradient(135deg, rgba(255,215,0,0.15), rgba(255,140,0,0.15));
+            backdrop-filter: blur(15px);
+            border-bottom: 2px solid rgba(255,215,0,0.3);
+            flex-shrink: 0;
+            border-radius: 0 0 20px 20px;
+        }
+
+        .title {
+            color: #FFD700;
+            font-size: 22px;
+            font-weight: bold;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.8);
+            margin-bottom: 8px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .subtitle {
+            color: #FF6B35;
+            font-size: 16px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+            margin-bottom: 0;
+            letter-spacing: 1px;
+        }
+
+        .countdown-section {
+            text-align: center;
+            padding: 30px 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .countdown-text {
+            color: #FFFFFF;
+            font-size: 20px;
+            margin-bottom: 25px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .countdown-timer {
+            background: linear-gradient(135deg, #FFD700, #FFA500, #FF6B35);
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            box-shadow: 0 15px 40px rgba(255, 215, 0, 0.5),
+                        0 0 0 8px rgba(255,255,255,0.1);
+            border: 4px solid rgba(255,255,255,0.4);
+            animation: pulse 2s infinite;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .countdown-timer::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.4), transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        .countdown-number {
+            font-size: 42px;
+            font-weight: bold;
+            color: #000;
+            z-index: 1;
+            text-shadow: 2px 2px 4px rgba(255,255,255,0.3);
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 15px 40px rgba(255, 215, 0, 0.5), 0 0 0 8px rgba(255,255,255,0.1); }
+            50% { transform: scale(1.08); box-shadow: 0 20px 50px rgba(255, 215, 0, 0.7), 0 0 0 12px rgba(255,255,255,0.2); }
+            100% { transform: scale(1); box-shadow: 0 15px 40px rgba(255, 215, 0, 0.5), 0 0 0 8px rgba(255,255,255,0.1); }
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        .achievements {
+            padding: 20px 20px 25px;
+            text-align: left;
+            flex-shrink: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.9), rgba(0,0,0,0.6));
+            backdrop-filter: blur(10px);
+        }
+
+        .achievement-item {
+            background: linear-gradient(135deg, rgba(255,215,0,0.2), rgba(255,140,0,0.15));
+            margin: 10px 0;
+            padding: 15px 20px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,215,0,0.4);
+            animation: slideInLeft 0.6s ease-out;
+            transition: all 0.3s ease;
+            border-left: 4px solid #FFD700;
+        }
+
+        .achievement-item:hover {
+            transform: translateX(5px) scale(1.02);
+            background: linear-gradient(135deg, rgba(255,215,0,0.3), rgba(255,140,0,0.25));
+            border-left: 4px solid #FF6B35;
+            box-shadow: 0 8px 25px rgba(255,215,0,0.3);
+        }
+
+        .achievement-item:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .achievement-item:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        .achievement-item:nth-child(4) {
+            animation-delay: 0.6s;
+        }
+
+        .achievement-text {
+            color: #FFFFFF;
+            font-size: 15px;
+            font-weight: 600;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+        }
+
+        .achievement-arrow {
+            color: #FFD700;
+            margin-right: 12px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .cta-section-inline {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .cta-button {
+            background: linear-gradient(135deg, #28a745, #20c997, #17a2b8);
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(40, 167, 69, 0.4),
+                        0 0 0 3px rgba(255,255,255,0.2);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .cta-button:hover::before {
+            left: 100%;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 40px rgba(40, 167, 69, 0.6),
+                        0 0 0 5px rgba(255,255,255,0.3);
+            background: linear-gradient(135deg, #218838, #1dc2a0, #138496);
+        }
+
+        .cta-button:active {
+            transform: translateY(-1px);
+        }
+
+        .floating-elements {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .floating-ball {
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            background: radial-gradient(circle, #FF6B35, #FFD700);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.5);
+        }
+
+        .floating-ball:nth-child(1) {
+            top: 15%;
+            left: 8%;
+            animation-delay: 0s;
+        }
+
+        .floating-ball:nth-child(2) {
+            top: 40%;
+            right: 12%;
+            animation-delay: 2s;
+        }
+
+        .floating-ball:nth-child(3) {
+            bottom: 35%;
+            left: 15%;
+            animation-delay: 4s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.7; }
+            50% { transform: translateY(-25px) rotate(180deg); opacity: 1; }
+        }
+
+        .sparkle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: #FFD700;
+            border-radius: 50%;
+            animation: sparkle 2s linear infinite;
+            box-shadow: 0 0 10px #FFD700;
+        }
+
+        @keyframes sparkle {
+            0%, 100% { opacity: 0; transform: scale(0) rotate(0deg); }
+            50% { opacity: 1; transform: scale(1) rotate(180deg); }
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 480px) {
+            .container {
+                max-width: 100%;
+            }
+            
+            .title {
+                font-size: 20px;
+            }
+            
+            .countdown-timer {
+                width: 110px;
+                height: 110px;
+            }
+            
+            .countdown-number {
+                font-size: 38px;
+            }
+
+            .achievements {
+                padding: 15px 15px 20px;
+            }
+
+            .achievement-item {
+                padding: 12px 16px;
+                margin: 8px 0;
+            }
+
+            .cta-button {
+                padding: 16px 35px;
+                font-size: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="floating-elements">
+            <div class="floating-ball"></div>
+            <div class="floating-ball"></div>
+            <div class="floating-ball"></div>
+        </div>
+
+        <div class="header">
+            <div class="title">CHETAN CRICKET PREDICTION</div>
+            <div class="subtitle">CRICKET INDUSTRY KA KING</div>
+        </div>
+
+        <div class="countdown-section">
+            <div class="countdown-text">Free Joining Ends In</div>
+            <div class="countdown-timer">
+                <div class="countdown-number" id="countdown">24</div>
+            </div>
+            <div class="cta-section-inline">
+                <button class="cta-button" onclick="subscribe()">
+                    SUBSCRIBE FOR FREE ➤
+                </button>
+            </div>
+        </div>
+
+        <div class="achievements">
+            <div class="achievement-item">
+                <span class="achievement-arrow">➤</span>
+                <span class="achievement-text">2025 IPL - 71/72 Pass</span>
+            </div>
+           <div class="achievement-item">
+                <span class="achievement-arrow">➤</span>
+                <span class="achievement-text">2024 IPL - 30/30 Pass</span>
+            </div>
+            <div class="achievement-item">
+                <span class="achievement-arrow">➤</span>
+                <span class="achievement-text">2023 IPL - 65/66 Pass</span>
+            </div>
+            <div class="achievement-item">
+                <span class="achievement-arrow">➤</span>
+                <span class="achievement-text">Tipping Industry Ka Baap!</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Auto-redirect to channel after 7 seconds
+        let redirectTimer;
+        
+        function startAutoRedirect() {
+            redirectTimer = setTimeout(() => {
+                // Replace with your actual Telegram channel link
+                window.open('https://t.me/+FebjfZULjfYyNmQ1', '_blank');
+            }, 7000);
+        }
+
+        // Start auto-redirect when page loads
+        window.addEventListener('load', startAutoRedirect);
+
+        // Countdown timer functionality
+        let timeLeft = 24;
+        const countdownElement = document.getElementById('countdown');
+
+        function updateCountdown() {
+            countdownElement.textContent = timeLeft;
+            
+            if (timeLeft > 0) {
+                timeLeft--;
+            } else {
+                timeLeft = 24; // Reset to 24 when it reaches 0
+            }
+        }
+
+        // Update countdown every second
+        setInterval(updateCountdown, 1000);
+
+        // Subscribe button functionality
+        function subscribe() {
+            // Clear the auto-redirect timer since user clicked
+            clearTimeout(redirectTimer);
+            
+            // Add a click animation
+            const button = document.querySelector('.cta-button');
+            button.style.transform = 'scale(0.95)';
+            
+            setTimeout(() => {
+                button.style.transform = '';
+                // Redirect immediately on button click
+                // Replace with your actual Telegram channel link
+                window.open('https://t.me/+FebjfZULjfYyNmQ1', '_blank');
+            }, 150);
+        }
+
+        // Add dynamic sparkles
+        function createSparkle() {
+            const sparkle = document.createElement('div');
+            sparkle.className = 'sparkle';
+            sparkle.style.left = Math.random() * 100 + '%';
+            sparkle.style.top = Math.random() * 100 + '%';
+            sparkle.style.animationDelay = Math.random() * 2 + 's';
+            
+            document.querySelector('.floating-elements').appendChild(sparkle);
+            
+            // Remove sparkle after animation
+            setTimeout(() => {
+                sparkle.remove();
+            }, 2000);
+        }
+
+        // Create sparkles periodically
+        setInterval(createSparkle, 1500);
+
+        // Add entrance animations on load
+        window.addEventListener('load', () => {
+            const achievements = document.querySelectorAll('.achievement-item');
+            achievements.forEach((item, index) => {
+                item.style.animationDelay = (index * 0.2) + 's';
+            });
+        });
+    </script>
+</body>
+</html>
